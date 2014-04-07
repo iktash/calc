@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Payoneer calc</title>
+
+	
+	<script src="http://code.angularjs.org/1.2.16/angular.min.js"></script>
+	
+</head>
+<body data-ng-app="main" data-ng-controller="calc">
+
+$<input type="number" data-ng-model="usd" data-ng-change="calcHRN()"> = 
+UAH<input type="number" data-ng-model="hrn" data-ng-change="calcUSD()"> / 
+<input type="number" data-ng-model="rate" data-ng-change="calcUSD()"> * 
+{{ coef }} + ${{ addTax }}
+
+</body>
+
+
+<script type="text/javascript">
+	
+var main = angular.module("main", []);
+
+main.controller("calc", function($scope) {
+	$scope.rate = 11.57;
+	$scope.coef = 1.035;
+	$scope.addTax = 3.15;
+	$scope.usd = 0;
+	$scope.hrn = 4000;
+
+	$scope.calcUSD = function() {
+		$scope.usd = $scope.hrn / $scope.rate * $scope.coef + $scope.addTax;
+	}
+
+	$scope.calcHRN = function() {
+		$scope.hrn = ($scope.usd - $scope.addTax) / $scope.coef * $scope.rate;
+	}
+
+	$scope.calcUSD();
+});
+
+</script>
+
+</html>
