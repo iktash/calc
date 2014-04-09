@@ -8,77 +8,55 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+	<script src="calc.js"></script>
 </head>
 <body data-ng-app="main" data-ng-controller="calc">
 
 <div class="cont center-text">
-	<div class="inline-block large-text">
-		I have<br><input type="number" data-ng-model="usd" data-ng-change="calcUAH()" step="0.1" class="big-input"><br>USD
+	<div class="pad large-text colored">
+		I have 
+		<input type="number"
+			data-ng-model="usd"
+			data-ng-change="calcUAH()"
+			data-ng-disabled="idle"
+			step="0.1"
+			class="big-input">
+		 USD
 	</div>
-	<div class="inline-block large-text">
-		I'll get<br><input type="number" data-ng-model="uah" data-ng-change="calcUSD()" step="0.1" class="big-input"><br>UAH	
+	<div class="pad large-text colored--2">
+		I'll get 
+		<input type="number"
+			data-ng-model="uah"
+			data-ng-change="calcUSD()"
+			data-ng-disabled="idle"
+			step="0.1"
+			class="big-input">
+		 UAH	
 	</div>
 </div>
-<div class="cont">
-	<div class="">
-		Mastercard exchange rate: <input type="number" data-ng-model="rate" data-ng-change="calcUAH()" step="0.1">
+<div class="cont pad">
+	<div class="medium-text pad">
+		Mastercard exchange rate (USD/UAH): 
+		<input type="number"
+			data-ng-model="rate"
+			data-ng-change="calcUAH()"
+			data-ng-disabled="idle"
+			step="0.1"
+			class="medium-input">
+		<a href="#" data-ng-click="updateRate()">update</a>
+		<br>
+	</div>
+</div>
+<div class="cont" data-ng-show="error != ''">
+	<div class="medium-text center-text pad--big colored--error">
+		{{ error }}
+	</div>
+</div>
+<div class="cont" data-ng-show="message != ''">
+	<div class="medium-text center-text pad--big colored--message">
+		{{ message }}
 	</div>
 </div>
 
 </body>
-
-
-<script type="text/javascript">
-	
-var main = angular.module("main", []);
-
-main.service('MastercardRate', function($http, $q) {
-	var deferred = $q.defer();
-
-	this.getRate = function() {
-		$http({
-			url: 'get_rate.php',
-		}).success(function(data) {
-			console.log(data.rate);
-			deferred.resolve(data.rate);
-		}).error(function(data) {
-			deferred.reject('error');
-		});
-
-		return deferred.promise;	
-	}
-});
-
-main.service('Round', function() {
-	this.round2 = function($n) {
-		return Math.round($n * 100) / 100;
-	}
-});
-
-main.controller("calc", function($scope, MastercardRate, Round) {
-	$scope.rate = 0;
-	$scope.coef = 1.035;
-	$scope.addTax = 3.15;
-	$scope.usd = 100;
-	$scope.uah = 0;
-
-	$scope.calcUSD = function() {
-		$scope.usd = Round.round2($scope.uah / $scope.rate * $scope.coef + $scope.addTax);
-	}
-
-	$scope.calcUAH = function() {
-		$scope.uah = Round.round2(($scope.usd - $scope.addTax) / $scope.coef * $scope.rate);
-	}
-
-	var promise = MastercardRate.getRate();
-	promise.then(function(rate) {
-		$scope.rate = Number(rate);
-		$scope.calcUAH();
-	}, function(error) {
-		$scope.rate = 0;
-	});
-});
-
-</script>
-
 </html>

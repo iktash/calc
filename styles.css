@@ -2,6 +2,22 @@
 	font-family: 'Alike', serif;
 }
 
+html,
+body {
+	font-size: 16px;
+	background-color: #d6d6d6;
+}
+
+input {
+	font-size: 0.7em;
+	border: none;
+	outline: none;
+	margin: 0;
+}
+input:disabled {
+	background-color: #b6b6b6;
+}
+
 .cont {
 	padding: 1em;
 }
@@ -9,17 +25,38 @@
 	text-align: center;
 }
 
-.inline-block {
-	display: inline-block;
+.pad {
 	padding: 0.5em;
+}
+.pad--big {
+	padding: 1.5em;
 }
 
 .large-text {
 	font-size: 2.5em;
 }
+.medium-text {
+	font-size: 1.5em;
+}
 
 .big-input {
-	font-size: 0.7em;
-	width: 4em;
+	width: 4.5em;
 	padding: 0.2em;
+}
+.medium-input {
+	width: 3.5em;
+	padding: 0.2em;
+}
+
+.colored {
+	background-color: #307ec7;
+}
+.colored--2 {
+	background-color: #48c430;
+}
+.colored--message {
+	background-color: #b6b6b6;
+}
+.colored--error {
+	background-color: #ff3a3a;
 }
