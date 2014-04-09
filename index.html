@@ -35,7 +35,12 @@
 		 UAH	
 	</div>
 </div>
-<div class="cont pad">
+<div class="cont" data-ng-show="message_show">
+	<div class="medium-text center-text pad--big" data-ng-class="{'colored--message': !error, 'colored--error': error}">
+		{{ message }}
+	</div>
+</div>
+<div class="cont">
 	<div class="medium-text pad">
 		Mastercard exchange rate (USD/UAH): 
 		<input type="number"
@@ -46,11 +51,6 @@
 			class="medium-input">
 		<a href="#" data-ng-click="updateRate()">update</a>
 		<br>
-	</div>
-</div>
-<div class="cont" data-ng-show="message_show">
-	<div class="medium-text center-text pad--big" data-ng-class="{'colored--message': !error, 'colored--error': error}">
-		{{ message }}
 	</div>
 </div>
 
