@@ -33,7 +33,8 @@ main.controller("calc", function($scope, MastercardRate, Round) {
 	$scope.usd = 100;
 	$scope.uah = 0;
 	$scope.message = '';
-	$scope.error = '';
+	$scope.message_show = false
+	$scope.error = false;
 	$scope.idle = false;
 
 	$scope.calcUSD = function() {
@@ -44,20 +45,28 @@ main.controller("calc", function($scope, MastercardRate, Round) {
 		$scope.uah = Round.round2(($scope.usd - $scope.addTax) / $scope.coef * $scope.rate);
 	}
 
+	function showMessage(message, error) {
+		$scope.message = message;
+		$scope.message_show = true;
+		$scope.error = error;
+	}
+
+	function hideMessage() {
+		$scope.message_show = false;
+	}
+
 	$scope.updateRate = function() {
 		$scope.idle = true;
-		$scope.message = 'Loading exchange rate...';
-		$scope.error = '';
+		showMessage('Loading exchange rate...', false);
 		var promise = MastercardRate.getRate();
 		promise.then(function(rate) {
 			$scope.rate = Number(rate);
 			$scope.calcUAH();
-			$scope.message = '';
+			hideMessage();
 			$scope.idle = false;
 		}, function(error) {
 			$scope.rate = 0;
-			$scope.message = '';
-			$scope.error = 'Can not get exchange rate';
+			showMessage('Can not get exchange rate', true);
 			$scope.idle = false;
 		});
 	}

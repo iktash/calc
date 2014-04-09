@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+	<script src="http://code.angularjs.org/1.2.16/angular-animate.min.js"></script>
 	<script src="calc.js"></script>
 </head>
 <body data-ng-app="main" data-ng-controller="calc">
@@ -47,13 +48,8 @@
 		<br>
 	</div>
 </div>
-<div class="cont" data-ng-show="error != ''">
-	<div class="medium-text center-text pad--big colored--error">
-		{{ error }}
-	</div>
-</div>
-<div class="cont" data-ng-show="message != ''">
-	<div class="medium-text center-text pad--big colored--message">
+<div class="cont" data-ng-show="message_show">
+	<div class="medium-text center-text pad--big" data-ng-class="{'colored--message': !error, 'colored--error': error}">
 		{{ message }}
 	</div>
 </div>
