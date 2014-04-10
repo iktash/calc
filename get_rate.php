@@ -1,10 +1,18 @@
 <?php
 	$rate = null;
+	$date = null;
+	
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
 
-	$data = [
-		'service' => 'loadInitialValues'
-	];
-	$date = getDateFromXML(getDataXML($data));
+	if ($request->date) {
+		$date = $request->date;
+	} else {
+		$data = [
+			'service' => 'loadInitialValues'
+		];
+		$date = getDateFromXML(getDataXML($data));
+	}
 
 	$data = array(
 		'service' => 'getExchngRateDetails',
@@ -12,18 +20,16 @@
 		'settlementDate' => $date
 	);
 	$xml = getDataXML($data);
-	if (!$xml) {
-		$xml = getDataXML($data);
-		if (!$xml) {
-			$xml = getDataXML($data);
-		}
-	}
 
 	if ($xml && count($xml->TRANSACTION_CURRENCY->children()) > 0) {
 		$rate = getRateFromXML($xml);
+		die(json_encode(['rate' => $rate, 'date' => $date]));
+	} else {
+		header('HTTP/1.1 500 Internal server error');
+		die(json_encode(['error' => 'Error during fetching rate']));
 	}
 	
-	die(json_encode(['rate' => $rate, 'date' => $date]));
+	
 
 	function getDataXML($data)
 	{

@@ -6,9 +6,11 @@
 
 	<link href='http://fonts.googleapis.com/css?family=PT+Serif&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="ng-quick-date.css">
+	<link rel="stylesheet" type="text/css" href="ng-quick-date-default-theme.css">
 
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
-	<script src="http://code.angularjs.org/1.2.16/angular-animate.min.js"></script>
+	<script src="ng-quick-date.min.js"></script>
 	<script src="calc.js"></script>
 </head>
 <body data-ng-app="main" data-ng-controller="calc">
@@ -50,7 +52,15 @@
 			data-ng-disabled="idle"
 			step="0.1"
 			class="medium-input">
-		 для даты {{ date }}
+		 для даты 
+		<quick-datepicker
+			data-ng-model='date'
+			data-date-format="d MMM yyyy"
+			data-placeholder="Выбрать дату"
+			data-disable-timepicker="true"
+			data-disable-clear-button="true"
+			data-ng-change="changeDate()"
+		></quick-datepicker>
 	</div>
 	<a href="#" data-ng-click="updateRate()">обновить курс</a>
 </div>

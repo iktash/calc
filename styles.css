@@ -51,6 +51,9 @@ input:disabled {
 
     display: block !important;
     opacity: 1;
+
+    max-width: 1200px;
+    margin: 0 auto;
 }
 .center-text {
 	text-align: center;

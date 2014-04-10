@@ -1,33 +1,37 @@
-var main = angular.module("main", []);
+var main = angular.module("main", ['ngQuickDate']);
 
-main.service('MastercardRate', function($http, $q) {
-	this.getRate = function() {
+main.service('MastercardRate', function($http, $q, $filter) {
+	this.getRate = function(date) {
+		date = $filter('date')(date, 'MM/dd/yyyy');
 		var deferred = $q.defer();
 
-		$http({
-			url: 'get_rate.php',
-		}).success(function(data) {
-			if (! data.rate) {
-				deferred.reject('error');
-			}
+		$http.post('get_rate.php', {'date': date})
+			.success(function(data) {
+				if (! data.rate) {
+					deferred.reject('error');
+				}
 
-			deferred.resolve(data);
-		}).error(function(data) {
-			deferred.reject('error');
-		});
+				deferred.resolve(data);
+			}).error(function(data) {
+				deferred.reject('error');
+			});
 
 		return deferred.promise;	
 	}
 });
 
-main.service('StorageRate', function() {
+main.service('StorageRate', function($filter) {
 	this.getRate = function(date) {
+		date = $filter('date')(date, 'MM/dd/yyyy');
+
 		var rate = localStorage.getItem(date);
 
 		return Number(rate);
 	}
 	this.setRate = function(data) {
-		localStorage.setItem(data.date, data.rate);
+		var date = $filter('date')(data.date, 'MM/dd/yyyy');
+
+		localStorage.setItem(date, data.rate);
 	}
 });
 
@@ -37,19 +41,19 @@ main.service('Round', function() {
 	}
 });
 
-main.service('CurrentDate', function($filter) {
+main.service('CurrentDate', function() {
 	this.get = function() {
 		var currentTime = new Date().getTime();
-		currentTime = currentTime - 1000 * 60 * 60 * 24;
-		var formattedDate = $filter('date')(currentTime, 'MM/dd/yyyy');
+		yesterdayTime = currentTime - 1000 * 60 * 60 * 24;
 
-		return formattedDate;
+		return new Date(yesterdayTime);
 	}
 });
 
 main.controller("calc", function($scope, MastercardRate, StorageRate, Round, CurrentDate) {
 	$scope.rate = 0;
 	$scope.date = CurrentDate.get();
+	$scope.old_date = $scope.date;
 	$scope.coef = 1.035;
 	$scope.addTax = 3.15;
 	$scope.usd = 100;
@@ -82,10 +86,12 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 		
 		showMessage('Загрузка курса...', false);
 		
-		var promise = MastercardRate.getRate();
+		var promise = MastercardRate.getRate($scope.date);
 		promise.then(function(data) {
+			data.date = new Date(data.date);
 			$scope.rate = Number(data.rate);
 			$scope.date = data.date;
+			$scope.old_date = $scope.date;
 
 			StorageRate.setRate(data);
 			
@@ -97,17 +103,30 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 		}, function(error) {
 			$scope.rate = 0;
 			
+			$scope.date = $scope.old_date;
+
 			showMessage('Не удалось получить курс', true);
 			
 			$scope.idle = false;
+
+			$scope.getRate();
 		});
 	}
 
-	var rate = StorageRate.getRate($scope.date);
-	if (! rate) {
-		$scope.updateRate();
-	} else {
-		$scope.rate = Number(rate);
-		$scope.calcUAH();
+	$scope.changeDate = function() {
+		hideMessage();
+		$scope.getRate();
 	}
+
+	$scope.getRate = function() {
+		var rate = StorageRate.getRate($scope.date);
+		if (! rate) {
+			$scope.updateRate();
+		} else {
+			$scope.rate = Number(rate);
+			$scope.calcUAH();
+		}
+	}
+
+	$scope.getRate();
 });
