@@ -80,7 +80,7 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 	$scope.updateRate = function() {
 		$scope.idle = true;
 		
-		showMessage('Loading exchange rate...', false);
+		showMessage('Загрузка курса...', false);
 		
 		var promise = MastercardRate.getRate();
 		promise.then(function(data) {
@@ -97,7 +97,7 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 		}, function(error) {
 			$scope.rate = 0;
 			
-			showMessage('Can not get exchange rate', true);
+			showMessage('Не удалось получить курс', true);
 			
 			$scope.idle = false;
 		});

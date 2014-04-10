@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Payoneer ATM calculator</title>
+	<title>Payoneer калькулятор для банкомата</title>
 
-	<link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=PT+Serif&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
@@ -15,24 +15,24 @@
 
 <div class="cont center-text">
 	<div class="pad large-text colored">
-		I have 
+		У меня есть 
 		<input type="number"
 			data-ng-model="usd"
 			data-ng-change="calcUAH()"
 			data-ng-disabled="idle"
 			step="0.1"
 			class="big-input">
-		 USD
+		 долларов
 	</div>
 	<div class="pad large-text colored--2">
-		I'll get 
+		Я хочу получить 
 		<input type="number"
 			data-ng-model="uah"
 			data-ng-change="calcUSD()"
 			data-ng-disabled="idle"
 			step="0.1"
 			class="big-input">
-		 UAH	
+		 гривен	
 	</div>
 </div>
 <div class="cont" data-ng-show="message_show">
@@ -43,15 +43,15 @@
 </div>
 <div class="cont">
 	<div class="medium-text pad">
-		Mastercard exchange rate (USD/UAH): 
+		Курс Mastercard (USD/UAH) 
 		<input type="number"
 			data-ng-model="rate"
 			data-ng-change="calcUAH()"
 			data-ng-disabled="idle"
 			step="0.1"
 			class="medium-input">
-		 for settlement date {{ date }}
-		<a href="#" data-ng-click="updateRate()">update</a>
+		 для даты {{ date }}
+		<a href="#" data-ng-click="updateRate()">обновить</a>
 	</div>
 </div>
 
