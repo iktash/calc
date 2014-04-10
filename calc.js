@@ -11,12 +11,23 @@ main.service('MastercardRate', function($http, $q) {
 				deferred.reject('error');
 			}
 
-			deferred.resolve(data.rate);
+			deferred.resolve(data);
 		}).error(function(data) {
 			deferred.reject('error');
 		});
 
 		return deferred.promise;	
+	}
+});
+
+main.service('StorageRate', function() {
+	this.getRate = function(date) {
+		var rate = localStorage.getItem(date);
+
+		return Number(rate);
+	}
+	this.setRate = function(data) {
+		localStorage.setItem(data.date, data.rate);
 	}
 });
 
@@ -26,8 +37,19 @@ main.service('Round', function() {
 	}
 });
 
-main.controller("calc", function($scope, MastercardRate, Round) {
+main.service('CurrentDate', function($filter) {
+	this.get = function() {
+		var currentTime = new Date().getTime();
+		currentTime = currentTime - 1000 * 60 * 60 * 24;
+		var formattedDate = $filter('date')(currentTime, 'MM/dd/yyyy');
+
+		return formattedDate;
+	}
+});
+
+main.controller("calc", function($scope, MastercardRate, StorageRate, Round, CurrentDate) {
 	$scope.rate = 0;
+	$scope.date = CurrentDate.get();
 	$scope.coef = 1.035;
 	$scope.addTax = 3.15;
 	$scope.usd = 100;
@@ -57,19 +79,35 @@ main.controller("calc", function($scope, MastercardRate, Round) {
 
 	$scope.updateRate = function() {
 		$scope.idle = true;
+		
 		showMessage('Loading exchange rate...', false);
+		
 		var promise = MastercardRate.getRate();
-		promise.then(function(rate) {
-			$scope.rate = Number(rate);
+		promise.then(function(data) {
+			$scope.rate = Number(data.rate);
+			$scope.date = data.date;
+
+			StorageRate.setRate(data);
+			
 			$scope.calcUAH();
+			
 			hideMessage();
+			
 			$scope.idle = false;
 		}, function(error) {
 			$scope.rate = 0;
+			
 			showMessage('Can not get exchange rate', true);
+			
 			$scope.idle = false;
 		});
 	}
 
-	$scope.updateRate();
+	var rate = StorageRate.getRate($scope.date);
+	if (! rate) {
+		$scope.updateRate();
+	} else {
+		$scope.rate = Number(rate);
+		$scope.calcUAH();
+	}
 });

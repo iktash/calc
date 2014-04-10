@@ -36,7 +36,8 @@
 	</div>
 </div>
 <div class="cont" data-ng-show="message_show">
-	<div class="medium-text center-text pad--big" data-ng-class="{'colored--message': !error, 'colored--error': error}">
+	<div class="medium-text center-text pad--big"
+		data-ng-class="{'colored--message': !error, 'colored--error': error}">
 		{{ message }}
 	</div>
 </div>
@@ -49,8 +50,8 @@
 			data-ng-disabled="idle"
 			step="0.1"
 			class="medium-input">
+		 for settlement date {{ date }}
 		<a href="#" data-ng-click="updateRate()">update</a>
-		<br>
 	</div>
 </div>
 

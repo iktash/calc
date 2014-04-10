@@ -1,39 +1,36 @@
 <?php
 	$rate = null;
 
-	$limit = 10;
-	$days = 0;
-	while ($days <= $limit) {
-		$date = date("m/d/Y", strtotime("-{$days} days"));
-		$xml = getDataXML($date);
+	$data = [
+		'service' => 'loadInitialValues'
+	];
+	$date = getDateFromXML(getDataXML($data));
+
+	$data = array(
+		'service' => 'getExchngRateDetails',
+		'baseCurrency' => 'USD',
+		'settlementDate' => $date
+	);
+	$xml = getDataXML($data);
+	if (!$xml) {
+		$xml = getDataXML($data);
 		if (!$xml) {
-			$xml = getDataXML($date);
-			if (!$xml) {
-				$xml = getDataXML($date);
-			}
-		}
-		if ($xml && count($xml->TRANSACTION_CURRENCY->children()) > 0) {
-			$rate = getRateFromXML($xml);
-			break;
-		} else {
-			$days++;
+			$xml = getDataXML($data);
 		}
 	}
-	
-	die(json_encode(['rate' => $rate]));
 
-	function getDataXML($date)
+	if ($xml && count($xml->TRANSACTION_CURRENCY->children()) > 0) {
+		$rate = getRateFromXML($xml);
+	}
+	
+	die(json_encode(['rate' => $rate, 'date' => $date]));
+
+	function getDataXML($data)
 	{
 		$url = 'https://www.mastercard.com/psder/eu/callPsder.do';
-		$data = array(
-			'service' => 'getExchngRateDetails',
-			'baseCurrency' => 'USD',
-			'settlementDate' => $date
-		);
-
 		$options = array(
 		    'http' => array(
-		        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+		        'header'  => "Content-type: application/x-www-form-urlencoded\r\nConnection: close\r\n",
 		        'method'  => 'POST',
 		        'content' => http_build_query($data),
 		    ),
@@ -59,4 +56,9 @@
 		}
 
 		return null;
+	}
+
+	function getDateFromXML($xml)
+	{
+		return (string)$xml->SETTLEMENT_DATE;
 	}
