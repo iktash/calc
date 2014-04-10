@@ -25,7 +25,7 @@
 		 долларов
 	</div>
 	<div class="pad large-text colored--2">
-		Я хочу получить 
+		Я хочу снять 
 		<input type="number"
 			data-ng-model="uah"
 			data-ng-change="calcUSD()"
@@ -41,8 +41,8 @@
 		{{ message }}
 	</div>
 </div>
-<div class="cont">
-	<div class="medium-text pad">
+<div class="cont medium-text">
+	<div class="">
 		Курс Mastercard (USD/UAH) 
 		<input type="number"
 			data-ng-model="rate"
@@ -51,8 +51,8 @@
 			step="0.1"
 			class="medium-input">
 		 для даты {{ date }}
-		<a href="#" data-ng-click="updateRate()">обновить</a>
 	</div>
+	<a href="#" data-ng-click="updateRate()">обновить курс</a>
 </div>
 
 </body>
