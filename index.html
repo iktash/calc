@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Payoneer калькулятор для банкомата</title>
+	<title>Payoneer ATM calculator</title>
 
 	<link href='http://fonts.googleapis.com/css?family=PT+Serif&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="styles.css">
@@ -17,24 +17,24 @@
 
 <div class="cont center-text">
 	<div class="pad large-text colored">
-		У меня есть 
+		I have 
 		<input type="number"
 			data-ng-model="usd"
 			data-ng-change="calcUAH()"
 			data-ng-disabled="idle"
 			step="0.1"
 			class="big-input">
-		 долларов
+		 USD
 	</div>
 	<div class="pad large-text colored--2">
-		Я хочу снять 
+		I'll receive 
 		<input type="number"
 			data-ng-model="uah"
 			data-ng-change="calcUSD()"
 			data-ng-disabled="idle"
 			step="0.1"
 			class="big-input">
-		 гривен	
+		 UAH	
 	</div>
 </div>
 <div class="cont" data-ng-show="message_show">
@@ -45,14 +45,14 @@
 </div>
 <div class="cont medium-text">
 	<div class="">
-		Курс Mastercard (USD/UAH) 
+		Mastercard exchange rate (USD/UAH) 
 		<input type="number"
 			data-ng-model="rate"
 			data-ng-change="calcUAH()"
 			data-ng-disabled="idle"
 			step="0.1"
 			class="medium-input">
-		 для даты 
+		 for date 
 		<quick-datepicker
 			data-ng-model='date'
 			data-date-format="d MMM yyyy"
@@ -62,7 +62,7 @@
 			data-ng-change="changeDate()"
 		></quick-datepicker>
 	</div>
-	<a href="#" data-ng-click="updateRate()">обновить курс</a>
+	<a href="#" data-ng-click="updateRate()">update rate</a>
 </div>
 
 </body>
