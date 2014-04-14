@@ -102,14 +102,15 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 			$scope.idle = false;
 		}, function(error) {
 			$scope.rate = 0;
-			
-			$scope.date = $scope.old_date;
 
 			showMessage('Can not get the rate', true);
 			
 			$scope.idle = false;
 
-			$scope.getRate();
+			if ($scope.date != $scope.old_date) {
+				$scope.date = $scope.old_date;
+				$scope.getRate();
+			}
 		});
 	}
 
