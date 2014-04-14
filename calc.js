@@ -13,7 +13,7 @@ main.service('MastercardRate', function($http, $q, $filter) {
 
 				deferred.resolve(data);
 			}).error(function(data) {
-				deferred.reject('error');
+				deferred.reject(data.settl_date);
 			});
 
 		return deferred.promise;	
@@ -53,7 +53,6 @@ main.service('CurrentDate', function() {
 main.controller("calc", function($scope, MastercardRate, StorageRate, Round, CurrentDate) {
 	$scope.rate = 0;
 	$scope.date = CurrentDate.get();
-	$scope.old_date = $scope.date;
 	$scope.coef = 1.035;
 	$scope.addTax = 3.15;
 	$scope.usd = 100;
@@ -91,7 +90,6 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 			data.date = new Date(data.date);
 			$scope.rate = Number(data.rate);
 			$scope.date = data.date;
-			$scope.old_date = $scope.date;
 
 			StorageRate.setRate(data);
 			
@@ -100,17 +98,16 @@ main.controller("calc", function($scope, MastercardRate, StorageRate, Round, Cur
 			hideMessage();
 			
 			$scope.idle = false;
-		}, function(error) {
+		}, function(settl_date) {
 			$scope.rate = 0;
+
+			$scope.date = settl_date;
 
 			showMessage('Can not get the rate', true);
 			
 			$scope.idle = false;
 
-			if ($scope.date != $scope.old_date) {
-				$scope.date = $scope.old_date;
-				$scope.getRate();
-			}
+			$scope.getRate();
 		});
 	}
 

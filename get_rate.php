@@ -8,10 +8,7 @@
 	if ($request->date) {
 		$date = $request->date;
 	} else {
-		$data = [
-			'service' => 'loadInitialValues'
-		];
-		$date = getDateFromXML(getDataXML($data));
+		$date = getSettlDate();
 	}
 
 	$data = array(
@@ -25,8 +22,13 @@
 		$rate = getRateFromXML($xml);
 		die(json_encode(['rate' => $rate, 'date' => $date]));
 	} else {
+		$date = getSettlDate();
+
 		header('HTTP/1.1 500 Internal server error');
-		die(json_encode(['error' => 'Error during fetching rate']));
+		die(json_encode([
+			'error' => 'Error during fetching rate',
+			'settl_date' => $date
+		]));
 	}
 	
 	
@@ -62,6 +64,15 @@
 		}
 
 		return null;
+	}
+
+	function getSettlDate()
+	{
+		$data = [
+			'service' => 'loadInitialValues'
+		];
+		
+		return getDateFromXML(getDataXML($data));
 	}
 
 	function getDateFromXML($xml)
