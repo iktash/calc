@@ -1,0 +1,1 @@
+A web application that allows to calculate cash amount during withdrawing money from ATM in Ukraine using Payoneer card.
