@@ -20,15 +20,15 @@
 
 	if ($xml && count($xml->TRANSACTION_CURRENCY->children()) > 0) {
 		$rate = getRateFromXML($xml);
-		die(json_encode(['rate' => $rate, 'date' => $date]));
+		die(json_encode(array('rate' => $rate, 'date' => $date)));
 	} else {
 		$date = getSettlDate();
 
 		header('HTTP/1.1 500 Internal server error');
-		die(json_encode([
+		die(json_encode(array(
 			'error' => 'Error during fetching rate',
 			'settl_date' => $date
-		]));
+		)));
 	}
 	
 	
@@ -68,9 +68,9 @@
 
 	function getSettlDate()
 	{
-		$data = [
+		$data = array(
 			'service' => 'loadInitialValues'
-		];
+		);
 		
 		return getDateFromXML(getDataXML($data));
 	}

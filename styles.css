@@ -104,3 +104,7 @@ input:disabled {
     -o-transition: all 0.7s ease;
     transition: all 0.7s ease;
 }
+
+.v-mid {
+    vertical-align: middle;
+}

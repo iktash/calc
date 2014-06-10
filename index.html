@@ -17,24 +17,22 @@
 
 <div class="cont center-text">
 	<div class="pad large-text colored">
-		I have 
 		<input type="number"
 			data-ng-model="usd"
 			data-ng-change="calcUAH()"
 			data-ng-disabled="idle"
 			step="0.1"
-			class="big-input">
-		 USD
+			class="big-input v-mid">
+		<span class="v-mid">$</span>
 	</div>
 	<div class="pad large-text colored--2">
-		I'll receive 
 		<input type="number"
 			data-ng-model="uah"
 			data-ng-change="calcUSD()"
 			data-ng-disabled="idle"
 			step="0.1"
-			class="big-input">
-		 UAH	
+			class="big-input v-mid">
+		<span class="v-mid">₴</span>	
 	</div>
 </div>
 <div class="cont" data-ng-show="message_show">
@@ -50,7 +48,7 @@
 			data-ng-model="rate"
 			data-ng-change="calcUAH()"
 			data-ng-disabled="idle"
-			step="0.1"
+			step="0.01"
 			class="medium-input">
 		 for date 
 		<quick-datepicker
@@ -61,6 +59,14 @@
 			data-disable-clear-button="true"
 			data-ng-change="changeDate()"
 		></quick-datepicker>
+		 with 
+		<input type="number"
+			data-ng-model="addTax"
+			data-ng-change="calcUAH()"
+			data-ng-disabled="idle"
+			step="0.01"
+			class="medium-input">
+		 % commission
 	</div>
 	<a href="#" data-ng-click="updateRate()">update rate</a>
 </div>
